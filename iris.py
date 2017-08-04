@@ -94,8 +94,7 @@ pd.scatter_matrix(df, c=y, figsize=[8,8], s=145, marker='D')
 
 #but... where's my scatter matrix?
 #silly, always use plt.show()!
-#plt.show()
-#01324-1834813-481-834-18431-4838418481746583462347564578262758674875845687458675489267
+plt.show()
 
 #be careful! make sure to exit out of the plot before giving more commands in the console
 
