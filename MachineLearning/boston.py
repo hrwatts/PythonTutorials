@@ -1,6 +1,6 @@
 #machine learning with boston dataset!
 #python3 ~/Documents/pyfiles/boston.py
-#which by the way, is just the absolute file path of iris.py on my computer
+#which by the way, is just the absolute file path of boston.py on my computer
 #made based on the class I got from DataCamp.com 'Supervised Learning with scikit-learn'
 #this is a REGRESSION model
 
