@@ -2,6 +2,7 @@
 #this is help for advanced metrics in classification models
 #coincidentally, it also helps with databases from the internet
 #and organizing data
+#made based on the class I got from DataCamp.com 'Supervised Learning with scikit-learn'
 #python3 ~/Documents/pyfiles/congress.py
 
 #imports
