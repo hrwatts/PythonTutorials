@@ -1,6 +1,6 @@
 #machine learning with digits dataset!
 #python3 ~/Documents/pyfiles/digits.py
-#which by the way, is just the absolute file path of iris.py on my computer
+#which by the way, is just the absolute file path of digits.py on my computer
 #made based on the class I got from DataCamp.com 'Supervised Learning with scikit-learn'
 
 #imports
