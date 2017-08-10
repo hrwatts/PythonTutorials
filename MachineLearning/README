@@ -13,3 +13,4 @@ digits.py: Train-Test-Split, k-NN, Manual hyperparameter tuning
 digits2.py: k-NN, Grid Search Cross Validation Hyperparameter Tuning
 iris.py: k-NN, Data Esploratory Analysis
 iris2.py: k-NN, Accuracy, Train-Test-Split
+iris3.py: Decision Tree, Random seeds, Random Search Cross Validation
