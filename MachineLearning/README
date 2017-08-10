@@ -3,14 +3,14 @@ each .py files will be working out of a dataset of that name
 the .py files with no number are the first files on said datasets
 and as such will include more data exploratory analysis to start
 
-boston.py: For regression models supervised learning
-boston2.py: Rigde and Lasso Regression, Cross Validation
-botston3.py: Manual hyperparameter tuning Ridge Regression, Cross Validation
-congress.py: Getting Datasets off the internet, Confusion Matrix, Classification Report, k-NN
-congress2.py: Internet Datasets, Logistic Regression, ROC Curve, Area Under ROC Curve, Cross Validation
-congress3.py: Internet Datasets, Logistic Regression, Grid Search Cross Validation Hyperparameter Tuning
-digits.py: Train-Test-Split, k-NN, Manual hyperparameter tuning
-digits2.py: k-NN, Grid Search Cross Validation Hyperparameter Tuning
-iris.py: k-NN, Data Esploratory Analysis
-iris2.py: k-NN, Accuracy, Train-Test-Split
-iris3.py: Decision Tree, Random seeds, Random Search Cross Validation
+-boston.py: For regression models supervised learning
+-boston2.py: Rigde and Lasso Regression, Cross Validation
+-botston3.py: Manual hyperparameter tuning Ridge Regression, Cross Validation
+-congress.py: Getting Datasets off the internet, Confusion Matrix, Classification Report, k-NN
+-congress2.py: Internet Datasets, Logistic Regression, ROC Curve, Area Under ROC Curve, Cross Validation
+-congress3.py: Internet Datasets, Logistic Regression, Grid Search Cross Validation Hyperparameter Tuning
+-digits.py: Train-Test-Split, k-NN, Manual hyperparameter tuning
+-digits2.py: k-NN, Grid Search Cross Validation Hyperparameter Tuning
+-iris.py: k-NN, Data Esploratory Analysis
+-iris2.py: k-NN, Accuracy, Train-Test-Split
+-iris3.py: Decision Tree, Random seeds, Random Search Cross Validation
