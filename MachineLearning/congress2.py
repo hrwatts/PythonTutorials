@@ -110,6 +110,17 @@ plt.show()
 4    democrat  1  1  1  0  1  1  0  0  0  0  1  0  1  1  1  1
 Yes votes out of total: 177/435
 Number of Repulicans voting: 168
+Confustion Matrix Defualt Threshold: 
+[[102   5]
+ [  1  66]]
+Classification Report Defualt Threshold: 
+             precision    recall  f1-score   support
+
+   democrat       0.99      0.95      0.97       107
+ republican       0.93      0.99      0.96        67
+
+avg / total       0.97      0.97      0.97       174
+
 Prediction probabilty: 
 [[ 0.12727806  0.87272194]
  [ 0.92865639  0.07134361]
@@ -121,4 +132,5 @@ Prediction probabilty:
  [ 0.12727806  0.87272194]
  [ 0.92865639  0.07134361]
  [ 0.12727806  0.87272194]]
+
 '''
