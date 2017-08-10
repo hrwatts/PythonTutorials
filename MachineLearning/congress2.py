@@ -10,7 +10,7 @@ import pandas as pd
 from urllib.request import urlopen
 from sklearn.cross_validation import train_test_split
 from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import roc_curve
+from sklearn.metrics import roc_curve, confusion_matrix, classification_report
 from matplotlib import pyplot as plt
 
 #the same stuff from congress.py, just get the data and prepare it
@@ -44,7 +44,19 @@ logreg = LogisticRegression()
 #fit our data
 logreg.fit(X_train, y_train)
 
-#we want to get our ROC curve for this
+#make some predictions
+y_pred = logreg.predict(X_test)
+
+#get the confusion matrix and classification report
+#see ConfusionMatrixMetrixs.png (picture) for info on what these mean
+cm = confusion_matrix(y_test, y_pred)
+cr = classification_report(y_test, y_pred)
+
+#lets take a look
+print('Confustion Matrix Defualt Threshold: \n'+str(cm))
+print('Classification Report Defualt Threshold: \n'+str(cr))
+
+#now we want to get our ROC curve for this
 #Reciever Operating Characteristic Curve
 #so basically we are plotting the effects of our threshold
 #on the model
