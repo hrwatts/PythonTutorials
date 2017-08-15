@@ -1,16 +1,12 @@
 #iris machine learning testing, part 2
 #to use go to terminal and type:
 #python3 ~/Documents/pyfiles/iris2.py
-#which by the way, is just the absolute file path of iris.py on my computer
+#which by the way, is just the absolute file path of iris2.py on my computer
 #made based on the class I got from DataCamp.com 'Supervised Learning with scikit-learn'
 
 #imports
-#NOTE sklearn 0.17 (the one I have) has the train_test_split function
-#inside the cross_validation package
-#if using 0.18 (most current) do this:
-#from sklearn.model_selection import train_test_split
 from sklearn import datasets
-from sklearn.cross_validation import train_test_split
+from sklearn.model_selection import train_test_split
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt

@@ -6,8 +6,8 @@
 from sklearn import datasets
 from scipy.stats import randint
 from sklearn.tree import DecisionTreeClassifier
-from sklearn.grid_search import RandomizedSearchCV
-from sklearn.grid_search import GridSearchCV
+from sklearn.model_selection import RandomizedSearchCV
+from sklearn.model_selection import GridSearchCV
 import random
 import numpy as np
 

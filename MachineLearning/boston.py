@@ -5,13 +5,9 @@
 #this is a REGRESSION model
 
 #imports
-#NOTE sklearn 0.17 (the one I have) has the train_test_split function
-#inside the cross_validation package
-#if using 0.18 (most current) do this:
-#from sklearn.model_selection import train_test_split
 from sklearn import datasets
 from sklearn import linear_model
-from sklearn.cross_validation import train_test_split
+from sklearn.model_selection import train_test_split
 import pandas as pd
 import numpy as np
 from matplotlib import pyplot as plt

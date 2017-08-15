@@ -5,14 +5,10 @@
 #this is a REGRESSION model but with more advanced features
 
 #imports
-#NOTE sklearn 0.17 (the one I have) has the train_test_split (and cross_val_score) function 
-#inside the cross_validation package
-#if using 0.18 (most current) do this:
-#from sklearn.model_selection import train_test_split (also this for cross_val_score)
 from sklearn import datasets
 from sklearn.linear_model import Ridge
 from sklearn.linear_model import Lasso
-from sklearn.cross_validation import cross_val_score
+from sklearn.model_selection import cross_val_score
 import pandas as pd
 import numpy as np
 from matplotlib import pyplot as plt

@@ -5,14 +5,9 @@
 #python3 ~/Documents/pyfiles/congress3.py
 
 #imports
-#NOTE sklearn 0.17 (the one I have) has the train_test_split function
-#inside the cross_validation package
-#also, GridSearchCV is in grid_search package in 0.17
-#if using 0.18 (most current) do this:
-#from sklearn.model_selection import train_test_split, GridSearchCV
 from sklearn import datasets
-from sklearn.cross_validation import train_test_split
-from sklearn.grid_search import GridSearchCV
+from sklearn.model_selection import train_test_split
+from sklearn.model_selection import GridSearchCV
 from urllib.request import urlopen
 from sklearn.linear_model import LogisticRegression
 import pandas as pd

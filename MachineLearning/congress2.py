@@ -5,14 +5,10 @@
 #python3 ~/Documents/pyfiles/congress2.py
 
 #imports
-#NOTE sklearn 0.17 (the one I have) has the train_test_split (and cross_val_score) function 
-#inside the cross_validation package
-#if using 0.18 (most current) do this:
-#from sklearn.model_selection import train_test_split (also this for cross_val_score)
 import numpy as np
 import pandas as pd
 from urllib.request import urlopen
-from sklearn.cross_validation import train_test_split, cross_val_score
+from sklearn.model_selection import train_test_split, cross_val_score
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import roc_curve, confusion_matrix, classification_report, roc_auc_score
 from matplotlib import pyplot as plt
