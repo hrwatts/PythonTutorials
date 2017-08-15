@@ -1,7 +1,7 @@
 #cars mpg dataset (UCI)
-#pre-prosessing raw data, dummy variables, missing values, pipelining
+#pre-prosessing raw data, missing values, pipelining
 #made based on the class I got from DataCamp.com 'Supervised Learning with scikit-learn'
-#python3 ~/Documents/pyfiles/cars.py
+#python3 ~/Documents/pyfiles/cars2.py
 
 #imports
 import numpy as np
@@ -11,6 +11,7 @@ from urllib.request import urlopen
 from sklearn.preprocessing import Imputer
 from sklearn.pipeline import Pipeline
 from sklearn.linear_model import LinearRegression
+
 from sklearn.model_selection import train_test_split
 
 
@@ -96,13 +97,92 @@ pipeline=Pipeline(steps)
 #always good to have training and testing data
 X_train,X_test,y_train,y_test = train_test_split(X,y,test_size=.25,random_state=42)
 print(X_train.shape)
-
+print(X_test.shape)
 
 #fit pipeline to data
 pipeline.fit(X_train, y_train)
+
+#make a prediction
+y_pred = pipeline.predict(X_test)
+
+#manually evaluate the prediction
+manual_score=np.mean(y_pred/y_test)
+print(manual_score)
 
 #score on the test set
 score=pipeline.score(X_test,y_test)
 
 #print out the score
 print('The r-squared for our model: '+str(score))
+
+#while something is clearly VERY odd about this r-squared being equal to 1
+#I cannot uncover it
+#here is output to console
+'''
+<class 'pandas.core.frame.DataFrame'>
+RangeIndex: 398 entries, 0 to 397
+Data columns (total 9 columns):
+mpg             398 non-null float64
+cylinders       398 non-null int64
+displacement    398 non-null float64
+horsepower      398 non-null object
+weight          398 non-null float64
+acceleration    398 non-null float64
+year            398 non-null int64
+origin          398 non-null int64
+name            398 non-null object
+dtypes: float64(4), int64(3), object(2)
+memory usage: 28.1+ KB
+None
+    mpg  cylinders  displacement horsepower  weight  acceleration  year  \
+0  18.0          8         307.0      130.0  3504.0          12.0    70   
+1  15.0          8         350.0      165.0  3693.0          11.5    70   
+2  18.0          8         318.0      150.0  3436.0          11.0    70   
+3  16.0          8         304.0      150.0  3433.0          12.0    70   
+4  17.0          8         302.0      140.0  3449.0          10.5    70   
+
+   origin                       name  
+0       1  chevrolet chevelle malibu  
+1       1          buick skylark 320  
+2       1         plymouth satellite  
+3       1              amc rebel sst  
+4       1                ford torino  
+DataFrame Shape: (398, 9)
+      mpg  cylinders  displacement horsepower  weight  acceleration  year  \
+32   25.0          4          98.0          ?  2046.0          19.0    71   
+126  21.0          6         200.0          ?  2875.0          17.0    74   
+330  40.9          4          85.0          ?  1835.0          17.3    80   
+336  23.6          4         140.0          ?  2905.0          14.3    80   
+354  34.5          4         100.0          ?  2320.0          15.8    81   
+374  23.0          4         151.0          ?  3035.0          20.5    82   
+
+     origin                  name  
+32        1            ford pinto  
+126       1         ford maverick  
+330       2  renault lecar deluxe  
+336       1    ford mustang cobra  
+354       2           renault 18i  
+374       1        amc concord dl  
+      mpg  cylinders  displacement horsepower  weight  acceleration  year  \
+32   25.0          4          98.0        NaN  2046.0          19.0    71   
+126  21.0          6         200.0        NaN  2875.0          17.0    74   
+330  40.9          4          85.0        NaN  1835.0          17.3    80   
+336  23.6          4         140.0        NaN  2905.0          14.3    80   
+354  34.5          4         100.0        NaN  2320.0          15.8    81   
+374  23.0          4         151.0        NaN  3035.0          20.5    82   
+
+     origin                  name  
+32        1            ford pinto  
+126       1         ford maverick  
+330       2  renault lecar deluxe  
+336       1    ford mustang cobra  
+354       2           renault 18i  
+374       1        amc concord dl  
+New DataFrame shape: (392, 9)
+[ 104.46938776  104.46938776  104.46938776  104.46938776  104.46938776
+  104.46938776]
+(298, 8)
+(100, 8)
+1.0
+The r-squared for our model: 1.0
+'''
