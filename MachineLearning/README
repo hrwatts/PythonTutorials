@@ -16,3 +16,5 @@ and as such will include more data exploratory analysis to start
 -iris.py: k-NN, Data Esploratory Analysis
 -iris2.py: k-NN, Accuracy, Train-Test-Split
 -iris3.py: Decision Tree, Random seeds, Random Search Cross Validation
+-iris4.py: Pre-processing Data, Scaling, Pipelining
+-wine.py: Pre-processing Data, Pipelining, Scaling Data, Cross Validation
