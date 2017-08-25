@@ -2,3 +2,4 @@ summary of files in folder
 
 -activation.py: manual activation functions, forward propagation, multi-layer networks
 -forward.py: manual forward propagation algorithm
+-gradient.py: manual gradient decent with MSE
