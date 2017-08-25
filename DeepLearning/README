@@ -1,3 +1,4 @@
 summary of files in folder
 
+-activation.py: manual activation functions, forward propagation, multi-layer networks
 -forward.py: manual forward propagation algorithm
