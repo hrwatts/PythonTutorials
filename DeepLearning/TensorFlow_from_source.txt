@@ -1,0 +1,130 @@
+So this is just a documentation of how I built TensorFlow from source code
+This is on Ubuntu 16.04.3 LTS
+
+I had to install git
+$ sudo apt install git
+
+I had to delete my virtual enviorment install of tensorflow since it was named tensflow
+and cloning this way creates a folder of the same name in the directory I had
+$ sudo rm -r tensorflow
+
+clone the repository (the source code) from online
+I don't need any special edition, just what's on master
+$ git clone https://github.com/tensorflow/tensorflow 
+
+It is very important you set up the right enviorment
+I had to install Bazel, so I went to Bazel's install how-to and it told me this
+$ sudo apt-get install openjdk-8-jdk
+
+$ echo "deb [arch=amd64] http://storage.googleapis.com/bazel-apt stable jdk1.8" | sudo tee /etc/apt/sources.list.d/bazel.list
+
+Still installing Bazel, but I did not have curl installed, so I installed that
+$ sudo apt install curl
+
+$ curl https://bazel.build/bazel-release.pub.gpg | sudo apt-key add -
+
+$ sudo apt-get update && sudo apt-get install bazel
+print(sess.run(hello))
+
+$ sudo apt-get upgrade bazel
+
+Bazel installation complete!
+Now continuing enviorment set up, I'll update my dependant libraries in python3
+Note: If you do not have these installed, this comman will also install them
+$ sudo -H pip3 install numpy --upgrade
+
+$ sudo -H pip3 install dev --upgrade
+
+$ sudo -H pip3 install pip --upgrade
+
+$ sudo -H pip3 install wheel --upgrade
+
+Now I must configure my setup before I build the pip package
+Basically just navigate to the bash script in the tensorFlow repository
+$ cd tensorFlow
+
+$ ./configure
+
+It asks where python is stored on my computer
+so I open a new terminal and type this to tell me
+$ which python3
+
+This is part of the tensorFlow/configure bash script
+----------------------------------------------------
+Please specify the location of python. [Default is /usr/bin/python]: /usr/bin/python3
+
+
+Found possible Python library paths:
+  /usr/local/lib/python3.5/dist-packages
+  /usr/lib/python3/dist-packages
+Please input the desired Python library path to use.  Defaultprint(sess.run(hello))
+ is [/usr/local/lib/python3.5/dist-packages]
+/usr/local/lib/python3.5/dist-packages
+---------------------------------------------------
+
+I used the defualt
+
+yes to jemalloc as malloc support, something Linux specific so sure
+no to Google Cloud Platform because that cost money to use
+no to Hadoop File System, cause I don't has crazy hardware, just my laptop
+yes to XLA JIT support (makes it go faster on intel CPUs, Accelerated Linear Algerbra)
+no to GDR support, it has something to do with OpenCL, and graphics cards
+no to VERBS support, which has something to do with Remote Direct Memory Access
+no to OpenCL support, again something to do with graphics cards
+no to CUDA support, I don't have an NVIDEA graphics card
+no to MPI support, something to do with large-scale clustering and parallel computing
+
+I chose the defualt for bazel option
+
+More of the tensorFlow/configure bash script
+---------------------------------------------------
+Do you wish to build TensorFlow with jemalloc as malloc support? [Y/n]: Y
+jemalloc as malloc support will be enabled for TensorFlow.
+
+Do you wish to build TensorFlow with Google Cloud Platform support? [y/N]: N
+No Google Cloud Platform support will be enabled for TensorFlow.
+
+Do you wish to build TensorFlow with Hadoop File System support? [y/N]: N
+No Hadoop File System support will be enabled for TensorFlow.
+
+Do you wish to build TensorFlow with XLA JIT support? [y/N]: y
+XLA JIT support will be enabled for TensorFlow.
+
+Do you wish to build TensorFlow with GDR sprint(sess.run(hello))
+upport? [y/N]: N
+No GDR support will be enabled for TensorFlow.
+
+Do you wish to build TensorFlow with VERBS support? [y/N]: N
+No VERBS support will be enabled for TensorFlow.
+
+Do you wish to build TensorFlow with OpenCL support? [y/N]: N
+No OpenCL support will be enabled for TensorFlow.
+
+Do you wish to build TensorFlow with CUDA support? [y/N]: N
+No CUDA support will be enabled for TensorFlow.
+
+Do you wish to build TensorFlow with MPI support? [y/N]: N
+No MPI support will be enabled for TensorFlow.
+
+Please specify optimization flags to use during compilation when bazel option "--config=opt" is specified [Default is -march=native]: -march=native
+
+Add "--config=mkl" to your bazel command to build with MKL support.
+Please note that MKL on MacOS or windows is still not supported.
+If you would like to use a local MKL instead of downloading, please set the environment variable "TF_MKL_ROOT" every time before build.
+Configuration finished
+----------------------------------------------------
+
+Then I told bazel to build my pip package
+still within the tensorflow directory
+I has GCC 5+ so I use --cxxopt="-D_GLIBCXX_USE_CXX11_ABI=0" with it
+$ bazel build --cxxopt="-D_GLIBCXX_USE_CXX11_ABI=0" --config=opt //tensorflow/tools/pip_package:build_pip_package
+
+
+Once it builds (1-3 hours depending on RAM)
+Create the .whl file
+$ bazel-bin/tensorflow/tools/pip_package/build_pip_package /tmp/tensorflow_pkg
+
+Install the wheel file
+$ sudo pip install /tmp/tensorflow_pkg/tensorflow-1.3.0-cp35-cp35m-linux_x86_64.whl
+
+And a successful build it was!
