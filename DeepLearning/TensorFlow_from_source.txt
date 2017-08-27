@@ -64,7 +64,7 @@ Please input the desired Python library path to use.  Defaultprint(sess.run(hell
 
 I used the defualt
 
-yes to jemalloc as malloc support, something Linux specific so sure
+yes to jemalloc as malloc support, some Linux specific resource allocation support
 no to Google Cloud Platform because that cost money to use
 no to Hadoop File System, cause I don't has crazy hardware, just my laptop
 yes to XLA JIT support (makes it go faster on intel CPUs, Accelerated Linear Algerbra)
@@ -96,6 +96,9 @@ No GDR support will be enabled for TensorFlow.
 
 Do you wish to build TensorFlow with VERBS support? [y/N]: N
 No VERBS support will be enabled for TensorFlow.
+hello = tf.constant('Hello, TensorFlow!')
+sess = tf.Session()
+print(sess.run(hello))
 
 Do you wish to build TensorFlow with OpenCL support? [y/N]: N
 No OpenCL support will be enabled for TensorFlow.
@@ -128,3 +131,13 @@ Install the wheel file
 $ sudo pip install /tmp/tensorflow_pkg/tensorflow-1.3.0-cp35-cp35m-linux_x86_64.whl
 
 And a successful build it was!
+
+Validate the build with
+$ python3
+>>>import tensorflow as tf
+>>>hello = tf.constant('Hello, TensorFlow!')
+>>>sess = tf.Session()
+>>>print(sess.run(hello))
+
+It should print 'Hello, TensorFlow!'
+
