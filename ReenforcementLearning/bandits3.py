@@ -1,6 +1,6 @@
-#python3 ~/PythonTutorials/ReenforcementLearning/bandits2.py
+#python3 ~/PythonTutorials/ReenforcementLearning/bandits3.py
 #The Multi-Arm Bandit problem
-#Re-enforcement learning, optimistic initial values strategy, greedy
+#Re-enforcement learning, upper confidence bounds
 #Made from a class I got on Udemy
 #"artificial intelligence reinforcement learning in python" by The LazyProgrammer
 
@@ -21,7 +21,7 @@ class Bandit:
 		self.m = m
 		#initialize the mean to some optimistic value
 		self.mean = 1
-		self.N = 1
+		self.N = 0
 
 	def pull(self):
 		#this is the reward given
@@ -36,6 +36,15 @@ class Bandit:
 	def update(self, x):
 		self.N +=1
 		self.mean = (1 - 1/self.N)*self.mean + (1/self.N)*x
+
+def upper_confidence_bound(mean, n, nj):
+	if nj==0:
+		#don't divide by zero please
+		return float('inf')
+	else:
+		#this is the algorithmn for calculating
+		#upper confidence bounds
+		return mean + np.sqrt(2*np.log(n) / nj)
 
 def run_experiment(m1,m2,m3,N):
 	"""
@@ -54,7 +63,11 @@ def run_experiment(m1,m2,m3,N):
 		#since unexplored bandits will have that really optimistic
 		#initial value and will appear the best one to the agent
 
-		j = np.argmax([b.mean for b in bandits])
+		#in the Upper Confidence Bound strategy, we choose with respect to
+		#the UCB of each bandit, instead of purely greedy, though it will
+		#converge to purely greedy
+		#i+1 because can't be zero
+		j = np.argmax([upper_confidence_bound(b.mean, i+1, b.N) for b in bandits])
 		x = bandits[j].pull()
 		bandits[j].update(x)
 
@@ -83,12 +96,12 @@ def run_experiment(m1,m2,m3,N):
 #run the actual experiment with given bandit win rates
 experiment = run_experiment(0.10,0.20,0.30, 100000)
 
-#compared to Epsilon-Greedy you can tell this strategy finds the optimal bandit sooner
-#and waste nothing after finding it, only explointing the best path
+#compared to regular Optimistic Initial Values this didn't perform so well...
+#and barely better than Epsilon-Greedy
 
 #output to console
 '''
-Bandit 0 0.25
-Bandit 1 0.25
-Bandit 2 0.2993449672483532
+Bandit 0 0.10865561694290983
+Bandit 1 0.16174974567650025
+Bandit 2 0.2996323902755991
 '''
