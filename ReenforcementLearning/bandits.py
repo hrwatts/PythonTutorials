@@ -2,12 +2,10 @@
 #The Multi-Arm Bandit problem
 #Re-enforcement learning, epsilon-greedy strategy
 #Made from a class I got on Udemy
-#"artificial intelligence reinforcement learning in python" by lazyprogrammer
+#"artificial intelligence reinforcement learning in python" by The LazyProgrammer
 
 import numpy as np
 import matplotlib.pyplot as plt
-
-#set seed for replicability
 
 class Bandit:
 	'''
@@ -78,9 +76,12 @@ def run_experiment(m1,m2,m3,eps,N):
 	cumulative_average = np.cumsum(data)/(np.arange(N)+1)
 
 	plt.plot(cumulative_average)
+
+	#just lines, like grid lines
 	plt.plot(np.ones(N)*m1)
 	plt.plot(np.ones(N)*m2)
 	plt.plot(np.ones(N)*m3)
+
 	plt.title("Espsilon = "+str(eps))
 	plt.xscale('log')
 	plt.show()
