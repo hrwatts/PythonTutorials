@@ -1,6 +1,6 @@
 #neural networks, classification, optimization tuning, architecture tuning
 #based on a course I got from Datacamp.com 'Deep Learning in Python'
-#python3 ~/Documents/pyfiles/dl/adult.py
+#python3 ~/PythonTutorials/DeepLearning/adult.py
 
 
 #imports
