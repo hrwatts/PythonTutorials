@@ -1,4 +1,9 @@
-#bayesian bandit
+#python3 ~/PythonTutorials/ReenforcementLearning/bandits4.py
+#The Multi-Arm Bandit problem
+#Re-enforcement learning, bayesian strategy
+#Made from a class I got on Udemy
+#"artificial intelligence reinforcement learning in python" by The LazyProgrammer
+#UNCOMPLETE TUTORIAL
 
 import numpy as np
 import matplotlib.pyplot as plt
