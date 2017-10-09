@@ -26,3 +26,10 @@ print('reader is being imported! Rembmer to check this __init__.py for package s
 >>> import reader
 reader is being imported!
 '''
+
+#__init__.py files normally include nothing inside, but it's still normal for them to do things
+
+#also remember that everything in this file is run (just like __init__ of a class)
+#when the package is imported, so we will elevate the Reader() class up
+from reader.reader import Reader
+from reader.reader2 import Reader2
