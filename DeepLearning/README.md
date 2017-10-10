@@ -11,4 +11,6 @@ Deep Learning examples:
 - wages.py: keras basics, regression, online datasets
 
 Other:
+- forwardPropagation.png: Visual of how forward propagation works in a neural network
+- multilayerNetwork.png: Visual of the same forward propagation but through multiple layers
 - TensorFlow_from_source.txt: A walkthrough of how I installed TensorFlow from its source code
