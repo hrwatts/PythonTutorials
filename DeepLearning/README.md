@@ -9,5 +9,6 @@ Deep Learning examples:
 - iris.py: keras basics, classification
 - iris2.py: neural network optimization tuning, classification
 - wages.py: keras basics, regression, online datasets
+
 Other:
 - TensorFlow_from_source.txt: A walkthrough of how I installed TensorFlow from its source code
