@@ -10,5 +10,6 @@ Directories:
 - Packages: Python package development
 - Programming: Understanding python programming foundations
 - ReinforcementLearning: Models that make learn to make decisions as new data comes in.
+- pandas: Working with the powerful pandas package
 
 These areas were not completed sequencially, be sure to check the README.md at the bottom of all these directories just like this one to find the kind of areas you are looking for.
