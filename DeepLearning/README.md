@@ -4,6 +4,7 @@ I also create examples for how the underlying functioning of a neural network wo
 Deep Learning examples:
 - activation.py: manual activation functions, forward propagation, multi-layer networks
 - adult.py: neural network architecture tuning, online datasets, classification, data preparation
+- adult2.py: same as adult.py, except I tried improving the accuracy by converting the nation-origin to scalar using GDP/c data from the world bank dataset
 - forward.py: manual forward propagation algorithm
 - gradient.py: manual gradient decent with MSE
 - iris.py: keras basics, classification
