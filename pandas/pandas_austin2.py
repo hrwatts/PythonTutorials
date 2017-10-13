@@ -1,5 +1,5 @@
 #based on a course I got at DataCamp.com "pandas Foundations"
-#more working with data time in pandas!
+#more working with data time in pandas! Reindex, forward/back fill
 #pandas_austin2.py
 
 import numpy as np
