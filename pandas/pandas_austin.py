@@ -1,5 +1,6 @@
 #based on a course I got at DataCamp.com "pandas Foundations"
 #working with data time in pandas!
+#pandas_austin.py
 
 import numpy as np
 import pandas as pd
@@ -8,17 +9,35 @@ from urllib.request import urlopen
 url = ('https://assets.datacamp.com/production/course_1639/'+
 	'datasets/weather_data_austin_2010.csv')
 
-raw_data = urlopen(url)
+raw_data0 = urlopen(url)
+raw_data1 = urlopen(url)
 raw_data2 = urlopen(url)
 raw_data3 = urlopen(url)
+
+#reads without parsing the str to DateTime object (technically TimeStamp object)
+print("Start---------\n")
+df = pd.read_csv(raw_data0)
+
+print(df.iloc[0])
+print(df.Date[0])
+print(type(df.Date[0]))
+
+#but you can still parse it even after this!
+#you tell it what format it is currently in, and it can change it!
+date_format = '%Y%m%d %H:%M'
+df.Date = pd.to_datetime(df.Date, format=date_format)
+print(df.iloc[0])
+print(df.Date[0])
+print(type(df.Date[0]))
 
 #reading in the data with argument parse_dates=True
 #will convert string dates (true to look in all columns, or specify) 
 #found into ISO 8601 format datetime objects
 #yyyy-mm-dd hh:mm:ss
-df = pd.read_csv(raw_data, parse_dates=['Date'])
+print("DF1---------\n",df.head())
+df = pd.read_csv(raw_data1, parse_dates=['Date'])
 
-print(df.head())
+print(df.iloc[0])
 print(df.Date[0])
 print(type(df.Date[0]))
 
@@ -30,6 +49,7 @@ print(type(df.Date[0]))
 dateparse = lambda x: pd.datetime.strptime(x, '%Y%m%d %H:%M')
 
 df = pd.read_csv(raw_data2, parse_dates=['Date'], date_parser=dateparse)
+
 
 print("DF2---------\n",df.head())
 print(df.Date[0])
@@ -51,7 +71,7 @@ DatetimeIndex: 8759 entries, 2010-01-01 00:00:00 to 2010-12-31 23:00:00
 '''
 #so you can in a much easier way see that this data is hourly for all of 2010
 #way better than just '8759' entries
-#you can also use much more sophisticated slicing
+#you can also use much more sophisticated slicing (use .loc NOT .iloc)
 
 #let's get the temperature for Austin at midnight on Feb 2nd
 print("Feb 2nd Midnight Temp:",df.loc['2010-02-02 00:00:00', 'Temperature'])
