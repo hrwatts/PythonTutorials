@@ -5,3 +5,4 @@ Uses of the pandas library
 - pandas_austin3.py: Resampling
 - pandas_iris.py: Visual Exploratory Data Analysis (plotting)
 - pandas_stocks.py: Reading files using pandas
+- pandas_titantic.py: Manipulation of string columns
