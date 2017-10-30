@@ -25,7 +25,7 @@ n_cols = X.shape[1]
 
 #split into training and testing sets
 X_train, X_test, y_train, y_test = train_test_split(X,y, test_size=0.25, random_state=21, stratify=y)
-
+print(X_train.shape,y_train.shape)
 #these few lines of easily readable code replaces dozens in tensorflow
 model = Sequential()
 model.add(Dense(24, activation='sigmoid', input_shape=(n_cols,)))
