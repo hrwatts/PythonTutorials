@@ -5,5 +5,6 @@ Uses of the pandas library
 - pandas_austin3.py: Resampling
 - pandas_iris.py: Visual Exploratory Data Analysis (plotting)
 - pandas_noaa.py: Manipulation of Strings and Dates, Working with timezones, Visualization subplots
+- pandas_population.py: Interpolation (reindexing with advanced filling)
 - pandas_stocks.py: Reading files using pandas
 - pandas_titantic.py: Manipulation of string columns
