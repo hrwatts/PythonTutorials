@@ -1,5 +1,5 @@
 #based on a course I got at DataCamp.com "pandas Foundations"
-#working with data time in pandas!
+#working with date time in pandas!
 #pandas_austin.py
 
 import numpy as np
