@@ -44,6 +44,7 @@ def play_game(p1,p2,env):
 		p1.update(env)
 		p2.update(env)
 
+
 class Player:
 
 	'''
@@ -164,6 +165,9 @@ p2=Player()
 env=Board()
 
 play_game(p1,p2,env)
+
+winners={0:"No Winner, it was a Draw",1:"Player 1",2:"Player 2"}
+print("The winner was " + winner[env.game_over()[1]])
 
 
 
