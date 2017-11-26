@@ -1,11 +1,18 @@
-#python3 ~/PythonTutorials/ReinforcementLearning/tic_tac_toe.py
+#python3 ~/PythonTutorials/ReinforcementLearning/tic_tac_toe_human.py
 #Iterative Re-enforcement learning agent, Value function
 #Made from a class I got on Udemy
 #"artificial intelligence reinforcement learning in python" by The LazyProgrammer
 
 import random
+import turtle
+import time
 
 '''
+This is the one I presented to my intelligent systems class, so it has more non-RL related
+code to demonstrate the agent to people
+
+Train the agent, play against it, watch it play
+
 reinforcment learning favors objects over scripting code
 at a high level, we have 2 main kinds objects
 the environment
@@ -15,10 +22,29 @@ both interact with the same single instance of the environment
 and they both interact with it in the same way (function play_game(p1,p2,env))
 '''
 
-def play_game(p1,p2,env):
+def play_game(pl1,pl2,env,human=0,verbose=True):
 	'''
 	This function runs an entire episode of the game
+
+	When a human is playing, they can be player 1, or player 2
 	'''
+
+	#no epsilon against humans
+	if human==1:
+		h=True
+		p1=Human(True)
+		p2=pl2
+		p2.epsilon=0
+	elif human==2:
+		h=True
+		p1=pl1
+		p1.epsilon=0
+		p2=Human(False)
+	else:
+		h=False
+		p1=pl1
+		p2=pl2
+		
 	
 	turn=0
 	
@@ -33,7 +59,8 @@ def play_game(p1,p2,env):
 		turn+=1
 
 		#current player makes a move
-		current_player.move(env)
+		#if a human player is playing, Turtle power is enabled
+		current_player.move(env, h, verbose)
 
 		#update state histories every move
 		state = env.get_state()
@@ -43,6 +70,22 @@ def play_game(p1,p2,env):
 	#update the value function
 	p1.update(env)
 	p2.update(env)
+
+	#restore epsilon for training
+	if human==1:
+		h=True
+		p1=Human(True)
+		p2=pl2
+		p2.epsilon=pl1.epsilon
+	elif human==2:
+		h=True
+		p1=pl1
+		p1.epsilon=pl2.epsilon
+		p2=Human(False)
+	else:
+		h=False
+		p1=pl1
+		p2=pl2
 	
 
 
@@ -76,13 +119,15 @@ class Player:
 		#reset state history to nothing
 		self.state_history=[]
 
-	def move(self, env):
+	def move(self, env, h, verbose):
 		#chooses an action based on epsilon-greedy
 		#generates random value to compare to epsilon
+		#h passes on to env.draw_board()
 		r = random.random()
 		if r<self.epsilon:
 			#do a random action instead of best known action
-			print("Random Action Being Taken...")
+			if verbose:
+				print("Random Action Being Taken...")
 			
 			#choose an action randomly from the empty spots
 			#NOTE: Error will be thrown if no spots are available
@@ -106,14 +151,21 @@ class Player:
 
 				#now while we are here let's take a look at what moves and
 				#values the agent is considering
-				print("Value of prospective move:",self.values[env.get_state()])
-				env.draw_board()
+				if verbose:
+					print("Value of possible move:",self.values[env.get_state()])
+					env.draw_board(h, self.values[env.get_state()])
 
 				#also remember to undo the pretend move
 				env.board[m]=0
 
 			#get the highest value, and use whatever move had the highest value
-			env.board[moves[record.index(max(record))]]=self.p
+			m=moves[record.index(max(record))]
+			env.board[m]=self.p
+
+			#and draw it out so the people can see
+			if verbose:
+				env.draw_board(h, self.values[env.get_state()])
+			
 			
 
 	def update_history(self, state):
@@ -157,8 +209,51 @@ class Player:
 
 		#the game is done, clear the history of the episode
 		self.reset_history()
+
+			
+class Human:
+	'''
+	Human class is a dummy player, not just because it isn't as good
+	as my highly trained agent, but also because it fakes functionality of
+	a Player class just so I can save some code
+	'''
+
+	def __init__(self,player_one):
+
+		#remember which player you are
+		if player_one:
+			self.p=1
+		else:
+			self.p=4
+
+	def move(self, env, h, dummy):
+		#get valid moves
+		valid = env.valid_moves()
+
+		#Since you are the human, choose your move
+		#prompt helps you out
+		prompt="Make a move...\nMoves:\n-------\n"
+		prompt+="|1|2|3|\n-------\n|4|5|6|\n-------\n|7|8|9|\n-------\n"
+		m=77
+		while m not in valid:
+			if m!=77:
+				print("That move isn't valid")
+			m = int(input(prompt))-1
+		#place your piece
+		env.board[m]=self.p
+		
+		#turtle power
+		turtle_print(env.board, "Human")
 			
 
+	def update_history(self, state):
+		#dummy
+		pass
+		
+	def update(self, env):
+		#dummy
+		pass
+	
 		
 
 class Board:
@@ -223,30 +318,34 @@ class Board:
 			state+=str(pos)
 		return state
 
-	def draw_board(self):
+	def draw_board(self, h, v):
 		'''
 		a really basic visuaization of the board in console
+		if verbose is false, nothing will show
 		'''
+		if not h:
+			string='| '
 
-		string='| '
-
-		for i,val in enumerate(self.board):
-			if i%3==0:
-				if i!=0:
+			for i,val in enumerate(self.board):
+				if i%3==0:
+					if i!=0:
+						print(string)
+					print("-------------")
+					string='| '
+				if val==1:
+					string+="X"
+				elif val==4:
+					string+="O"
+				else:
+					string+=" "
+				string+=" | "
+				if i==8:
 					print(string)
-				print("-------------")
-				string='| '
-			if val==1:
-				string+="X"
-			elif val==4:
-				string+="O"
-			else:
-				string+=" "
-			string+=" | "
-			if i==8:
-				print(string)
-				print("-------------")
-				print(" ")
+					print("-------------")
+					print(" ")
+		else:
+			#Enable Turtle power
+			turtle_print(self.board, v)
 		
 		
 	def game_over(self):
@@ -362,14 +461,119 @@ def initialize_states(player_one=True):
 
 	return values
 
+def turtle_print(board,v):
+	'''
+	takes in the board of the game, and generates turtle graphics for it
+	'''
+
+	turtle.clearscreen()
+
+	tu = turtle.Turtle()
+	tu.speed(0)
+	tu.pensize(8)
+	#line 1
+	tu.penup()
+	tu.goto(-300,-100)
+	tu.pendown()
+	tu.goto(300,-100)
+	#line 2
+	tu.penup()
+	tu.goto(-300,100)
+	tu.pendown()
+	tu.goto(300,100)
+	#line 3
+	tu.penup()
+	tu.goto(-100,300)
+	tu.pendown()
+	tu.goto(-100,-300)
+	#line 4
+	tu.penup()
+	tu.goto(100,300)
+	tu.pendown()
+	tu.goto(100,-300)
+	tu.ht()
+	
+	positions={
+			0:(-200,200),
+			1:(0,200),
+			2:(200,200),
+			3:(-200,0),
+			4:(0,0),
+			5:(200,0),
+			6:(-200,-200),
+			7:(0,-200),
+			8:(200,-200)
+		}
+
+	def draw_x(pos):
+		tu=turtle.Turtle()
+		tu.speed(0)
+		tu.penup()
+		tu.pensize(8)
+		tu.goto(positions[pos])
+		tx,ty=tu.pos()
+		tu.goto(tx+90,ty+90)
+		tu.pendown()
+		tu.goto(tx-90,ty-90)
+		tu.penup()
+		tu.goto(tx+90,ty-90)
+		tu.pendown()
+		tu.goto(tx-90,ty+90)
+		tu.ht()
+
+	def draw_o(pos):
+		tu=turtle.Turtle()
+		tu.shape("turtle")
+		tu.left(45)
+		tu.penup()
+		tu.turtlesize(7,7)
+		tu.goto(positions[pos])
+		
+
+	turtle.title("Value of prospective state: " + str(v))
+
+	for index,pos in enumerate(board):
+		if pos==1:
+			draw_x(index)
+		if pos==4:
+			draw_o(index)
+
+	time.sleep(.75)
+
+
+	
+	
+	
+	
+
 #---------------------------------
 #The "main" of the program is this
 #---------------------------------
 p1 = Player(True)
 p2 = Player(False)
 
-for i in range(4000):
-	print("playing a game... GAME:",i+1)
-	env = Board()
-	play_game(p1,p2,env)
+play = "yes"
+while play=="yes":
+	num_train = int(input("How many times should your agent train?"))
+	verbose = input("Show training?")
+	if verbose=="yes":
+		verbose=True
+	else:
+		verbose=False
+	
+	for t in range(num_train):
+		env=Board()
+		play_game(p1,p2,env,verbose=verbose)
+
+	h_player = int(input("What player would you like to be?"))
+	if h_player>0:
+		env=Board()
+		play_game(p1,p2,env,human=h_player)
+
+	play = input("Would you like to do this again?")
+
+print("Thanks for playing!")
+
+
+
 
