@@ -523,6 +523,7 @@ def turtle_print(board,v):
 
 	def draw_o(pos):
 		tu=turtle.Turtle()
+		tu.speed(0)
 		tu.shape("turtle")
 		tu.left(45)
 		tu.penup()
