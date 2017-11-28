@@ -9,7 +9,7 @@ Directories:
 - MachineLearning: Models that use more standard statistical methods for data science.
 - Packages: Python package development
 - Programming: Understanding python programming foundations
-- ReinforcementLearning: Models that make learn to make decisions as new data comes in.
+- ReinforcementLearning: Models learn based on rewards given for interacting with the environment
 - pandas: Working with the powerful pandas package
 
 These areas were not completed sequencially, be sure to check the README.md at the bottom of all these directories just like this one to find the kind of areas you are looking for.
