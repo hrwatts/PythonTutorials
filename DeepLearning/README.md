@@ -1,5 +1,6 @@
 Here I build neural networks and apply them to datasets. 
 I also create examples for how the underlying functioning of a neural network works.
+Note: You'll need Tensorflow for these
 
 Deep Learning examples:
 - activation.py: manual activation functions, forward propagation, multi-layer networks
