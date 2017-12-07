@@ -8,7 +8,8 @@ Main Files
 
 Supporting Files
 - census.csv: A csv file, used for demonstrating creating schemas off other files
-- census.sqlite: Same as above, but in sqlite (sqlite is a file that is structured to act like an SQL schema)
+- census.sqlite: Same as above, but in sqlite 
+  (sqlite is a file that is structured to act like an SQL schema)
 - employees.sqlite: For exploring SQLite files
 - pets.sql: Script to make a simple test DB to get things started
 
