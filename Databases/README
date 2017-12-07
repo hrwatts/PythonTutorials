@@ -1,8 +1,10 @@
 This directory has files related to using databases. Right now that is mostly SQL databases. 
 It also has data files for creating databases, but the focus of this is on using them in python
 
+
 Main Files
 - sql_basics.py: Using SQLAlchemy, making connections, creating reflection objects
+
 
 Supporting Files
 - census.csv: A csv file, used for demonstrating creating schemas off other files
