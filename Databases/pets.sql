@@ -38,5 +38,5 @@ CREATE TABLE dogs
 INSERT INTO dogs ( name, owner, birth, breed) VALUES
   ( 'Spot', 'Brandon', '2005-11-22', 'Poodle' ),
   ( 'Sir Bark', 'Kyle', '2010-12-03', 'Corgi' ),
-  ( 'Peaches', 'Kim', '2013-06-14', 'Husky' );\h
+  ( 'Peaches', 'Kim', '2013-06-14', 'Husky' );
 
