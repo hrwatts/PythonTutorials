@@ -4,7 +4,7 @@ the .py files with no number are the first files on said datasets
 and as such will include more data exploratory analysis to start
 
 - boston.py: For regression models supervised learning
-- boston2.py: Rigde and Lasso Regression, Cross Validation
+- boston2.py: Ridge and Lasso Regression, Cross Validation
 - boston3.py: Manual hyperparameter tuning Ridge Regression, Cross Validation
 - cars.py: Internet datasets, Missing values, data preprocessing, dummy variables, ridge regression
 - cars2.py: Internet datasets, Missing values, imputation, pipelines, regression
