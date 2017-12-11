@@ -1,0 +1,23 @@
+FaceBook open sourced their Time-Series forecasting library Prophet
+it is a very powerful tool for forecasting saled, and is ARIMA based
+
+Install using this guide
+https://facebook.github.io/prophet/docs/installation.html
+
+which in turn likely means you'll need to install pystan here
+http://pystan.readthedocs.io/en/latest/installation_beginner.html
+
+Go ahead and install some dependencies
+$ sudo -H pip install numpy
+$ sudo -H pip install cython
+
+Now install pystan
+$ sudo -H pip install pystan
+
+Now Prophet is on PyPi so just pip install that too
+$ sudo -H pip install fbprophet
+
+Prophet is quite large and will build it's package so expect 5-10 minutes of waiting
+for the install to finish
+
+After that you are done!
