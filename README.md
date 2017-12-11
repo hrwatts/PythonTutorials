@@ -5,9 +5,10 @@ I will credit those who's work I learned from wherever I can.
 Since I am learning all this stuff as I go, and write these as something to fall back on, be prepared for excessive comments.
 
 Directories:
-- Databases: SQL for Data Science (under construction)
-- DeepLearning: Anything to do with neural networks that is not reinforcement learning.
-- MachineLearning: Models that use more standard statistical methods for data science.
+- Databases: SQL for Data Science
+- DeepLearning: Anything to do with neural networks that is not reinforcement learning
+- Forecasting: Time series forecasting
+- MachineLearning: Models that use more standard statistical methods for data science
 - Packages: Python package development
 - Programming: Understanding python programming foundations
 - ReinforcementLearning: Models learn based on rewards given for interacting with the environment
