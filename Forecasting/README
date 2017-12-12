@@ -3,7 +3,9 @@ This directory in on the subject of time-series forecasting. Of particular note 
 
 Main Files
 - airline.py: Basics of working with Prophet Airline Passenger Dataset
+- portland.py: Using Prophet for forecasting Portland, OR transit riders
 
 Supporting Files
+- portland.csv: dataset for portland public transit system
 - prophet_installation: short guid on how to get FaceBook Prophet, it's actually really easy
 
