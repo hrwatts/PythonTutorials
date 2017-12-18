@@ -2,7 +2,7 @@
 #based on a course I got from DataCamp.com "Introduction to Databases in Python"
 #SQLAlchemy, Select Statements, Conjunctions, Ordering
 
-from sqlalchemy import create_engine, Table, MetaData, select, or_, and_, not_
+from sqlalchemy import create_engine, Table, MetaData, select, or_, and_, not_, desc
 
 #practicing more advanced select queries using a census database and SQLAlchemy
 engine = create_engine("sqlite:///census.sqlite")
@@ -136,3 +136,13 @@ stmt = stmt.where(
 )
 print('States from list AND male AND between 18-25 ordered by state and population in 2000 ' + "*"*8)
 [print(result) for result in connection.execute(stmt)]
+
+#we can also sort them in descending order, but it is done in a little bit of a strange way
+
+#selecting just the specific column, not rows from the whole table
+stmt = select([census.columns.state])
+#you wrap what you want to order by in the desc() (descending) function.
+stmt = stmt.order_by(desc(census.columns.state))
+results = connection.execute(stmt).fetchall()
+print('States sorted in descending order' + "*"*50)
+[print(r) for r in results[:10]]

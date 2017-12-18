@@ -5,6 +5,7 @@ It also has data files for creating databases, but the focus of this is on using
 Main Files
 - census1.py: SQLAlchemy structure, SQLite, Simple Queries, Result Sets
 - census2.py: SQLite, Select queries, Conjuctions, Ordering
+- census3.py: SQLite, Aggregation
 - sql_basics.py: Start using SQLAlchemy, making connections, creating reflection objects
 
 
