@@ -7,6 +7,8 @@ Main Files
 - census2.py: SQLite, Select queries, Conjuctions, Ordering
 - census3.py: SQLite, Aggregation, Distinct, Group By
 - census4.py: SQLite, SQLAlchemy+Pandas, plotting results
+- census5.py: SQLite, Math operators, Case statements, Cast statements
+- census6.py: SQLite, Joins, Foriegn Keys
 - sql_basics.py: Start using SQLAlchemy, making connections, creating reflection objects
 
 

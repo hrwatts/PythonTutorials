@@ -29,8 +29,8 @@ results = connection.execute(stmt).fetchall()
 df = pd.DataFrame(results)
 print(df)
 
-#pandas won't automatically import the column names at this time, so you must do it manually
-#usually with just the keys of the first result
+#NOTE: pandas won't automatically import the column names at this time, so you must do it manually
+#usually with just the keys of the first result, that's the easiest way to ensure all columns are met
 df.columns = results[0].keys()
 print(df)
 
