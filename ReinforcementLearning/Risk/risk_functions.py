@@ -2,7 +2,9 @@
 
 def gen_board():
     """
-    Returns 3 things in a single tuple:
+    Generates the initial state of a game of World Domination Risk
+    Possibly for certain other kinds as well
+    Returns 4 things in a single tuple:
     1) initializes the risk board as a graph using dictionaries
     2) initializes the continents with their value and nodes
     3) initializes a pre-game state of the board
@@ -79,10 +81,12 @@ def gen_board():
             "Peru"],
         "Africa":[
             3,
-            "",
-            "",
-            "",
-            ""],
+            "Egypt",
+            "Madagascar",
+            "N_Africa",
+            "E_Africa",
+            "C_Africa",
+            "S_Africa"],
         "Asia":[
             7,
             "Mid_East",
@@ -166,5 +170,118 @@ def gen_board():
         "India":[0,0],
         "Siam":[0,0]
         }
-    return (board, continents, territories)
 
+    #initializes the cards pre-start of game with their owner 'Y' is unused
+    cards = {
+        #North America
+        "Alaska":'Y',
+        "NW_Territory":'Y',
+        "Greenland":'Y',
+        "Alberta":'Y',
+        "Ontario":'Y',
+        "E_Canada":'Y',
+        "W_US":'Y',
+        "E_US":'Y',
+        "C_America":'Y',
+        #South America
+        "Venezuela":'Y',
+        "Brazil":'Y',
+        "Peru":'Y',
+        "Argentina":'Y',
+        #Africa
+        "N_Africa":'Y',
+        "Egypt":'Y',
+        "E_Africa":'Y',
+        "C_Africa":'Y',
+        "S_Africa":'Y',
+        "Madagascar":'Y',
+        #Australia
+        "Indonesia":'Y',
+        "New_Guinea":'Y',
+        "W_Australia":'Y',
+        "E_Australia":'Y',
+        #Europe
+        "Iceland":'Y',
+        "Great_Britain":'Y',
+        "Scandanavia":'Y',
+        "Russia":'Y',
+        "N_Europe":'Y',
+        "S_Europe":'Y',
+        "W_Europe":'Y',
+        #Asia
+        "Mid_East":'Y',
+        "Afghanistan":'Y',
+        "Ural":'Y',
+        "Siberia":'Y',
+        "Yakutsk":'Y',
+        "Kamchatka":'Y',
+        "Irkutsk":'Y',
+        "Mongolia":'Y',
+        "Japan":'Y',
+        "China":'Y',
+        "India":'Y',
+        "Siam":'Y',
+        #Wild cards
+        "Wild_1":'Y',
+        "Wild_2":'Y'
+        }
+    return (board, continents, territories, cards)
+
+def parse_state_string(state_string):
+    '''
+    gets the state from the state representation string
+    '''
+
+    board, continents, territories, cards = gen_board()
+    ter_string, cards_string, trade_string = state_string.split(':')
+
+    #parse territories string
+    for ter in ter_string.split('!'):
+        key, one, two = ter.split('.')
+        territories[key]=[one,int(two)]
+
+    #parse card string
+    for card in cards_string.split('!'):
+        key, val = card.split('.')
+        cards[key]=val
+
+    #cast to int
+    trade_ins = int(trade_string)
+
+    return (territories, cards, trade_ins)
+
+def get_state_string(state):
+    '''
+    gets the state representation string from the state
+    '''
+
+    #the game state consist of 3 things
+    #1) each territory's owner, and # of troops in them
+    #2) the owner of each card
+    #3) the number of Risk card sets that have been traded in 
+    territories,cards,trade_ins = state
+
+    #that state string will just be a really long string that
+    #is all the things concatenated using
+    #':' as a delimiter for categories
+    #'!' between elements
+    #'.' between parts of key-value pairs
+    state_string = ""
+
+    for key in territories:
+        one,two = territories[key]
+        state_string = state_string + key + "." + str(one) + "." + str(two) + "!"
+
+    #remove the last '!'
+    state_string = state_string[:-1]
+    
+    state_string = state_string + ":"
+    for key in cards:
+        state_string = state_string + key + "." + cards[key] + "!"
+
+    #remove the last '!'
+    state_string = state_string[:-1]
+
+    state_string = state_string + ":" + trade_ins
+
+    return state_string
