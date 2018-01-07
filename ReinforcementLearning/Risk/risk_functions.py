@@ -1,23 +1,21 @@
 #risk_functions.py
 
-import re
-
 def gen_dicts():
-    """returns helpful 2-way dictionaries about the game Risk"""
+    """returns helpful 2-way dictionaries for territories"""
     
     names = [
         #North America
         "Alaska","NW_Territory","Greenland","Alberta",
-        "Ontario","E_Canada","W_US","E_US","C_America",
+        "Ontario","Quebec","W_US","E_US","C_America",
         #South America
         "Venezuela","Brazil","Peru","Argentina",
         #Africa
-        "N_Africa","Egypt","E_Africa","C_Africa","S_Africa","Madagascar",
+        "N_Africa","Egypt","E_Africa","Congo","S_Africa","Madagascar",
         #Australia
         "Indonesia","New_Guinea","W_Australia","E_Australia",
         #Europe
         "Iceland","Great_Britain","Scandanavia",
-        "Russia","N_Europe","S_Europe","W_Europe",
+        "Ukraine","N_Europe","S_Europe","W_Europe",
         #Asia
         "Mid_East","Afghanistan","Ural","Siberia",
         "Yakutsk","Kamchatka","Irkutsk","Mongolia",
@@ -84,11 +82,19 @@ def gen_board():
         40:6,41:6,42:6,43:6
         }
 
+    #the army size presented on the front of the Risk card
+    #99 is wild card
+    card_faces = {0:1,1:10,2:5,3:1,4:5,5:10,6:1,7:10,8:5,9:10,10:10,
+                  11:5,12:1,13:1,14:1,15:10,16:5,17:10,18:1,19:5,20:5,
+                  21:10,22:1,23:1,24:5,25:10,26:10,27:5,28:5,29:1,30:10,
+                  31:1,32:5,33:10,34:5,35:5,36:1,37:10,38:1,39:5,40:1,
+                  41:10,42:99,43:99}
+
     trade_vals = [0,4,6,8,10,15,20,25,30,35,40,45,50,55,60]
 
-    return (board, continents, trade_vals, territories, cards)
+    return (board, continents, trade_vals, card_faces, territories, cards)
 
-def parse_state(state_string):
+def parse_state(state_string, debug=False):
     '''
     gets the state from the state representation string
     '''
@@ -100,7 +106,10 @@ def parse_state(state_string):
     state_string = str(state_string)
     #deconstruct the state_string
     for id_num in range(44):
-        print("DEBUG ID:", id_num, state_string[:10]) #***********************************************************************************
+        
+        if debug:
+            print("DEBUG ID:", id_num, state_string[:10])
+            
         if id_num!=0:
             #remove the next id #, the leading 0 is implied
             state_string = state_string[len(str(id_num)):]
@@ -139,7 +148,8 @@ def parse_state(state_string):
                     
                 elif nid=="42":
                     #on id_num 41 nid = 42 which is a wild card and must be handed differently
-                    print("Debug ID:",id_num,"C_O:",temp_c_owner,"T_O:",temp_t_owner,"non0:",state_string[:10]) #*******************************
+                    if debug:
+                        print("Debug ID:",id_num,"C_O:",temp_c_owner,"T_O:",temp_t_owner,"non0:",state_string[:10])
                     if temp_c_owner<8 and temp_t_owner==4 and temp_non_zero==3:
                         troops = troops + state_string[:nid_loc]
                         state_string = state_string[nid_loc+1:]
@@ -149,7 +159,8 @@ def parse_state(state_string):
                     #when a difficult parsing situation occurs, it's handled here
                     #it will go to the trouble location (what is throwing a false parse)
                     #and go ahead and add that to troops, then tries to parse again
-                    print("Debug ID:",id_num,"C_O:",temp_c_owner,"T_O:",temp_t_owner,"non0:",state_string[:10]) #*******************************
+                    if debug:
+                        print("Debug ID:",id_num,"C_O:",temp_c_owner,"T_O:",temp_t_owner,"non0:",state_string[:10])
                     troops = troops + state_string[:nid_loc+1]
                     state_string = state_string[nid_loc+1:]
 
@@ -172,7 +183,7 @@ def parse_state(state_string):
         print(cards)
         print("*"*50)
         print(trade_ins)
-        raise ValueError('Parsed incorrectly or impossible trade in')
+        raise ValueError('Parsed incorrectly or impossible trade in value')
 
     return (territories, cards, trade_ins) #this is what a state consist of
 
