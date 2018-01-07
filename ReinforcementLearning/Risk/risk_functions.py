@@ -1,9 +1,10 @@
 #risk_functions.py
 
-def gen_board():
-    """
-    Generates the environment and initial state of the game
-    """
+import re
+
+def gen_dicts():
+    """returns helpful 2-way dictionaries about the game Risk"""
+    
     names = [
         #North America
         "Alaska","NW_Territory","Greenland","Alberta",
@@ -29,6 +30,13 @@ def gen_board():
     name2node = {}
     for num, name in enumerate(names):
         name2node[name]=num
+
+    return (node2name,name2node)
+
+def gen_board():
+    """
+    Generates the environment and initial state of the game
+    """
     
     board = {
         0:[1,3,35],1:[2,3,4],2:[5,1,4,23],3:[0,4,1,6],4:[1,2,3,5,6,7],
@@ -66,68 +74,131 @@ def gen_board():
         41:[0,0]
         }
 
-    #initializes the cards pre-start of game with their owner '8' is unused
+    #initializes the cards pre-start of game with their owner
+    #6=unused card, 7=used card (max of 6 player per game)
     cards = {
-        0:8,1:8,2:8,3:8,4:8,5:8,6:8,7:8,8:8,9:8,
-        10:8,11:8,12:8,13:8,14:8,15:8,16:8,17:8,18:8,19:8,
-        20:8,21:8,22:8,23:8,24:8,25:8,26:8,27:8,28:8,29:8,
-        30:8,31:8,32:8,33:8,34:8,35:8,36:8,37:8,38:8,39:8,
-        40:8,41:8,42:8,43:8
+        0:6,1:6,2:6,3:6,4:6,5:6,6:6,7:6,8:6,9:6,
+        10:6,11:6,12:6,13:6,14:6,15:6,16:6,17:6,18:6,19:6,
+        20:6,21:6,22:6,23:6,24:6,25:6,26:6,27:6,28:6,29:6,
+        30:6,31:6,32:6,33:6,34:6,35:6,36:6,37:6,38:6,39:6,
+        40:6,41:6,42:6,43:6
         }
 
-    return (board, continents, territories, cards, node2name, name2node)
+    trade_vals = [0,4,6,8,10,15,20,25,30,35,40,45,50,55,60]
+
+    return (board, continents, trade_vals, territories, cards)
 
 def parse_state(state_string):
     '''
     gets the state from the state representation string
     '''
 
-    board, continents, territories, cards = gen_board()
-    ter_string, cards_string, trade_string = state_string.split(':')
+    territories = {}
+    cards = {}
+    trade_ins = 0
 
-    #parse territories string
-    for ter in ter_string.split('!'):
-        key, one, two = ter.split('.')
-        territories[key]=[one,int(two)]
+    state_string = str(state_string)
+    #deconstruct the state_string
+    for id_num in range(44):
+        print("DEBUG ID:", id_num, state_string[:10]) #***********************************************************************************
+        if id_num!=0:
+            #remove the next id #, the leading 0 is implied
+            state_string = state_string[len(str(id_num)):]
+        if id_num<42:
+            #parses the card owner, then territory owner, then troop count
+            
+            c_owner = state_string[0]
+            t_owner = state_string[1]
+            
+            state_string = state_string[2:] #don't need them anymore
 
-    #parse card string
-    for card in cards_string.split('!'):
-        key, val = card.split('.')
-        cards[key]=val
+            #there is a slightly complicated way in which troop numbers need to be parsed
+            #to avoid errors
+            #for example if there were 102 troops in territory 2 then the beginning of the state string
+            #may look like 1020200310234 is valid and it may
+            #generate errors relying solely on my trailing 0 delimiter
+            #NOTE: this does NOT eliminated the problems when parsing the state_string
+            #merely reduces the chance of one from occuring
 
-    #cast to int
-    trade_ins = int(trade_string)
+            troops=""
 
-    return (territories, cards, trade_ins)
+            unsolved = True
+
+            while(unsolved):
+                nid=str(id_num+1)
+                nid_loc=state_string.find("0"+nid)
+                temp_c_owner = int(state_string[nid_loc+1+len(nid)])
+                temp_t_owner = int(state_string[nid_loc+2+len(nid)])
+                temp_non_zero = int(state_string[nid_loc+3+len(nid)])
+            
+                if temp_c_owner<8 and temp_t_owner<6 and temp_non_zero!=0 and nid!="42":
+                    #if this is true, then it is much more unlikely to have a bad parse
+                    troops = troops + state_string[:nid_loc]
+                    state_string = state_string[nid_loc+1:]
+                    unsolved = False
+                    
+                elif nid=="42":
+                    #on id_num 41 nid = 42 which is a wild card and must be handed differently
+                    print("Debug ID:",id_num,"C_O:",temp_c_owner,"T_O:",temp_t_owner,"non0:",state_string[:10]) #*******************************
+                    if temp_c_owner<8 and temp_t_owner==4 and temp_non_zero==3:
+                        troops = troops + state_string[:nid_loc]
+                        state_string = state_string[nid_loc+1:]
+                        unsolved = False
+                else:
+                    #this is the error handling part
+                    #when a difficult parsing situation occurs, it's handled here
+                    #it will go to the trouble location (what is throwing a false parse)
+                    #and go ahead and add that to troops, then tries to parse again
+                    print("Debug ID:",id_num,"C_O:",temp_c_owner,"T_O:",temp_t_owner,"non0:",state_string[:10]) #*******************************
+                    troops = troops + state_string[:nid_loc+1]
+                    state_string = state_string[nid_loc+1:]
+
+            troops = int(troops)
+            territories[id_num] = [t_owner,troops]
+            cards[id_num] = c_owner
+
+        else:
+            #must be a wild card (42/43)
+            c_owner = int(state_string[0])
+            state_string = state_string[1:]
+            cards[id_num] = c_owner
+
+    trade_ins=int(state_string) #if it parses correctly, this should be all that remains
+
+    if trade_ins>15:
+        #trade ins go up to 15 possibilities
+        print(territories)
+        print("*"*50)
+        print(cards)
+        print("*"*50)
+        print(trade_ins)
+        raise ValueError('Parsed incorrectly or impossible trade in')
+
+    return (territories, cards, trade_ins) #this is what a state consist of
 
 def get_state(state):
     '''
-    gets the state representation string from the state
+    gets the state representation from the state
     '''
 
-    #the game state consist of 3 things
-    #1) each territory's owner, and # of troops in them
-    #2) the owner of each card
-    #3) the number of Risk card sets that have been traded in 
-    territories,cards,trade_ins = state
+    territories, cards, trade_ins = state
 
     state_string = ""
-
-    for key in territories:
-        one,two = territories[key]
-        state_string = state_string + str(key) + "."
-        state_string = state_string + str(one) + "." + str(two) + "!"
-
-    #remove the last '!'
-    state_string = state_string[:-1]
     
-    state_string = state_string + ":"
-    for key in cards:
-        state_string = state_string + str(key) + "." + str(cards[key]) + "!"
+    for key in range(44):
+        if key in territories:
+            t_owner,troops = territories[key]
+            c_owner = cards[key]
+            state_string = state_string + str(key)+str(c_owner)+str(t_owner)+str(troops)+"0"
+        else:
+            #must be wildcard (key 42/43)
+            owner = cards[key]
+            state_string = state_string + str(key)+str(owner)
 
-    #remove the last '!'
-    state_string = state_string[:-1]
+    state_string = state_string + str(trade_ins)
 
-    state_string = state_string + ":" + str(trade_ins)
+    state_string = int(state_string)
 
     return state_string
+
+    
