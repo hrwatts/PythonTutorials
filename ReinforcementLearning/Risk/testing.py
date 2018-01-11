@@ -27,9 +27,9 @@ def parse_test():
     state_2 = rf.parse_state(st_string, debug=True)
     st_string_2 = rf.get_state(state_2)
 
-    print("State String Size:",sys.getsizeof(st_string))
+    print("State String Size:",sys.getsizeof(st_string),st_string)
 
-    print("State String 2 Size:",sys.getsizeof(st_string_2))
+    print("State String 2 Size:",sys.getsizeof(st_string_2),st_string_2)
 
 
     #this compares state->rep rep->state lossless conversion
