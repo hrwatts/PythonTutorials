@@ -2,9 +2,20 @@
 #Christian Watts
 
 import sys
-import risk_functions as rf
-import Agent
+import risk_environment as risk
+import agent
 import random
+import world_domination as wd
+
+def config_test():
+    '''testing the game config from world_domination.py'''
+
+    players, deal = wd.config()
+    if deal:
+        order = wd.turn_order(players, debug=True)
+
+    return order
+    
 
 def parse_test():
     '''
@@ -16,16 +27,17 @@ def parse_test():
     test = "Hello World!"
     print(test,sys.getsizeof(test), "bytes")
 
-    board, continents, trade_vals, card_faces, territories, cards = rf.gen_board()
+    env = risk.Risk()
+    territories, cards, trade_ins = env.state
 
     #sets troops to a random number 1-2,000,000 for each territory
     for key in territories:
         territories[key][1]=random.randrange(1,2000000)
 
-    state = (territories, cards, 0)
-    st_string = rf.get_state(state)
-    state_2 = rf.parse_state(st_string, debug=True)
-    st_string_2 = rf.get_state(state_2)
+    state = (territories, cards, trade_ins)
+    st_string = env.get_state(state)
+    state_2 = env.parse_state(st_string, debug=True)
+    st_string_2 = env.get_state(state_2)
 
     print("State String Size:",sys.getsizeof(st_string),st_string)
 
@@ -41,13 +53,14 @@ def player_test():
     '''
 
     #get some initial environment
-    board, continents, trade_vals, card_faces, territories, cards = rf.gen_board()
+    env = risk.Risk()
+    territories, cards, trade_ins = env.state
 
     #create agent as player 1 and go first
-    agent = Agent.BaseAgent(0,0)
+    agent_demo = agent.BaseAgent(0,0)
 
-    print(agent)
-    print("Class Vars (player)",agent.player, "(turn order)",agent.order)
+    print(agent_demo)
+    print("Class Vars (player)",agent_demo.player, "(turn order)",agent_demo.order)
 
     #test sets
     #([cards owned],[correct sets])
@@ -63,8 +76,8 @@ def player_test():
         print("data:",data)
         temp_cards = dict(cards)
         for c in data:
-            temp_cards[c]=agent.player
-        sets  = agent.get_sets(temp_cards, card_faces, debug=True)
+            temp_cards[c]=agent_demo.player
+        sets  = agent_demo.get_sets(temp_cards, env.card_faces, debug=True)
 
         print("Sets detected:",sets)
         print("Sets supposed:",ans)
@@ -78,6 +91,32 @@ def player_test():
                     test_success=False
     return test_success
 
+def node_test():
+    '''test the nodes dictionaries'''
+
+    env = risk.Risk()
+    
+    node2name,name2node = env.id_names()
+
+    ids = list(node2name.keys())
+    for i_d in ids:
+        if i_d != name2node[node2name[i_d]] :
+            print("ID",i_d,"is not",name2node[node2name[i_d]])
+            return False
+
+    positions = env.pygame_positions()
+    for num in range(42):
+        print("Name:",node2name[num],"\tID:",num,"Position",positions[num])
+
+    return True
+
+
 #****************************************************************
-print("Parse Test successful?", parse_test(),"*"*50,"\n\n")
-print("Agent Test successful?", player_test(),"*"*50,"\n\n")
+if input("Run node test? y/n ").lower() == "y":
+    print("Node Test successful?", node_test(),"*"*50,"\n\n")    
+if input("Run parse test? y/n ").lower() == "y":
+    print("Parse Test successful?", parse_test(),"*"*50,"\n\n")
+if input("Run agent test? y/n ").lower() == "y":
+    print("Agent Test successful?", player_test(),"*"*50,"\n\n")
+if input("Run game config test? y/n ").lower() == "y":
+    print("Config Test successful?", config_test(),"*"*50,"\n\n")
