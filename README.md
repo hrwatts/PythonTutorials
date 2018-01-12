@@ -13,5 +13,6 @@ Directories:
 - Programming: Understanding python programming foundations
 - ReinforcementLearning: Models learn based on rewards given for interacting with the environment
 - pandas: Working with the powerful pandas package (Dataframes in Python)
+- pygame: Working with the graphics package pygame (like Turle but more advanced)
 
 These areas were not completed sequencially, be sure to check the README.md at the bottom of all these directories just like this one to find the kind of areas you are looking for.
