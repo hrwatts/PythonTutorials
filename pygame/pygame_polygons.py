@@ -1,4 +1,4 @@
-#pygame_buttons.py
+#pygame_polygons.py
 #Demo the use of buttons in pygame
 #Made from a tutorial I got here
 #https://pythonprogramming.net/pygame-buttons-part-1-button-rectangle/
