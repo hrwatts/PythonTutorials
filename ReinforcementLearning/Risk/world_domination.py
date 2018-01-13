@@ -15,7 +15,9 @@ def config():
     else:
         deal=False
 
-    return (players, deal)
+    order = turn_order(players)
+
+    return (order, deal)
 
 def turn_order(players, debug=False):
     '''

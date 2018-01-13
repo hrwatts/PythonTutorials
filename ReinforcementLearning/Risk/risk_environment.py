@@ -9,7 +9,7 @@ class Risk:
 
     def __init__(self):     
         self.node2name, self.name2node = self.id_names()
-        self.board, self.continents, self.trade_vals, self.card_faces = self.gen_board()
+        self.order, self.board, self.continents, self.trade_vals, self.card_faces = self.gen_board()
         self.state = self.gen_init_state()
 
 
@@ -87,8 +87,14 @@ class Risk:
 
         return (board, continents, trade_vals, card_faces)
 
-    def gen_init_state(self):
+    def gen_init_state(self, order, debug=False):
         '''generates the initial state of the game'''
+
+        #debugging will force player number and order to be 0-5
+        #so that this can be tested easier
+        if debug:
+            order = list(range(6))
+
         
         #initializes the initial state of the game
         #the game state is all the nodes, node owner, and army size per node
@@ -112,7 +118,8 @@ class Risk:
             }
 
         # 0 for number of card sets turned in
-        return (territories, cards, 0)
+        #this just packs the info into a state tuple that is used to begin the game
+        return (order, territories, cards, 0)
 
     def parse_state(self, state_string, debug=False):
         '''
@@ -234,18 +241,58 @@ class Risk:
 
         return state_string
 
-    def pygame_positions(self):
-        '''returns a dictionary that matches ID to node positions in pygame'''
+    def config(self):
+        '''used to gather user configuration settings for game'''
+        
+        players = int(input("How many players? "))
 
-        positions = [
-            (80,120), (220,140), (440,100), (180,180), (240,200),
-            (340,200), (200,260), (280,270), (235,320), (355,370),
-            (430,430), (355,440), (370,500), (520,320), (620,305),
-            (640,345), (610,390), (610,460), (690,450), (930,390),
-            (1030,405), (960,470),(1050,480), (490,150), (515,200),
-            (570,150), (650,190), (570,210), (610,240), (515,250),
-            (680,280), (750,230), (800,150), (860,110), (980,110),
-            (1120,130), (920,180),(960,230), (1030,260), (920,280),
-            (800,310), (885,330)]
+        if input("Deal territories to players? y/n "):
+            deal=True
+        else:
+            deal=False
 
-        return dict(zip(range(42),positions))
+        order = self.turn_order(players)
+
+        return (order, deal)
+
+    def turn_order(self, players, debug=False):
+        '''
+        assigns the turn order randomly
+        by picking one player and then going sequencially
+        '''
+        p_list = list(range(players))
+        op_list = list(p_list)
+        
+        order=[]
+
+        clockwise = input("Clockwise, highest roll, or input order? c/r/i ")
+        
+        if clockwise.lower()=="c":
+            
+            first = random.choice(p_list)
+            order = [player if player<=players-1 else p_list[player-players] for player in range(first, players+first)]
+
+            if debug:
+                print("the first player should be",first)
+            
+        elif clockwise.lower()=="r":
+
+            for player in range(players):
+                chosen = random.choice(p_list)
+                p_list.remove(chosen)
+                order.append(chosen)
+            
+        else:
+
+            order = [int(x)-1 for x in input("Enter the order by space seperated intergers example: \"1 2 3\" ").split()]
+
+        if debug:
+            print("the order decided was",order)
+
+        if sum([True for p in order if p in op_list])==players:
+            if debug:
+                return True
+        else:
+            raise ValueError("Error generating player order... " + str(order))
+        
+        return order
