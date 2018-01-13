@@ -83,9 +83,7 @@ class Risk:
                       31:1,32:5,33:10,34:5,35:5,36:1,37:10,38:1,39:5,40:1,
                       41:10,42:99,43:99}
 
-        trade_vals = [0,4,6,8,10,15,20,25,30,35,40,45,50,55,60]
-
-        return (board, continents, trade_vals, card_faces)
+        return (board, continents, card_faces)
 
     def gen_init_state(self, order, debug=False):
         '''generates the initial state of the game'''
@@ -239,60 +237,4 @@ class Risk:
 
         state_string = int(state_string)
 
-        return state_string
-
-    def config(self):
-        '''used to gather user configuration settings for game'''
-        
-        players = int(input("How many players? "))
-
-        if input("Deal territories to players? y/n "):
-            deal=True
-        else:
-            deal=False
-
-        order = self.turn_order(players)
-
-        return (order, deal)
-
-    def turn_order(self, players, debug=False):
-        '''
-        assigns the turn order randomly
-        by picking one player and then going sequencially
-        '''
-        p_list = list(range(players))
-        op_list = list(p_list)
-        
-        order=[]
-
-        clockwise = input("Clockwise, highest roll, or input order? c/r/i ")
-        
-        if clockwise.lower()=="c":
-            
-            first = random.choice(p_list)
-            order = [player if player<=players-1 else p_list[player-players] for player in range(first, players+first)]
-
-            if debug:
-                print("the first player should be",first)
-            
-        elif clockwise.lower()=="r":
-
-            for player in range(players):
-                chosen = random.choice(p_list)
-                p_list.remove(chosen)
-                order.append(chosen)
-            
-        else:
-
-            order = [int(x)-1 for x in input("Enter the order by space seperated intergers example: \"1 2 3\" ").split()]
-
-        if debug:
-            print("the order decided was",order)
-
-        if sum([True for p in order if p in op_list])==players:
-            if debug:
-                return True
-        else:
-            raise ValueError("Error generating player order... " + str(order))
-        
-        return order
+        return state_string    
