@@ -4,13 +4,25 @@ of Risk using standard World Domination ruleset
 See instructions https://www.hasbro.com/common/instruct/risk.pdf
 '''
 
+import random
+
 class Risk:
     '''Game Environment for Risk World Domination'''
 
-    def __init__(self):     
-        self.node2name, self.name2node = self.id_names()
-        self.order, self.board, self.continents, self.trade_vals, self.card_faces = self.gen_board()
-        self.state = self.gen_init_state()
+    def __init__(self, turn_order, trade_vals, steal_cards):
+        '''
+        setting up for the game
+        the arguments here are the rule settings for the game
+        turn_order: order that players take turns (in a list)
+        trade_vals: sequencial values of traded in card sets (also a list)
+        random_deal: whether players pick their territories at game start or are assigned
+        '''
+        self.node2name, self.name2node = self.id_names() #dictionaries to get territory name from ID
+        self.board, self.continents, self.card_faces = self.gen_board() #gets board set up
+        self.state = self.gen_init_state(steal_cards, turn_order) #gets an initial state
+        self.turn_order = turn_order #order in which players take turns, includes # of players
+        self.trade_vals = trade_vals #values for card set trade ins
+        self.steal_cards = steal_cards #whether or not cards are taken after player defeat
 
 
     def id_names(self):
@@ -85,8 +97,13 @@ class Risk:
 
         return (board, continents, card_faces)
 
-    def gen_init_state(self, order, debug=False):
-        '''generates the initial state of the game'''
+    def gen_init_state(self, steal_cards, turn_order, debug=False):
+        '''
+        generates the initial state of the game
+        steal_cards: whether or not players aquire the cards of their opponents upon defeat
+        turn_order: turn order of players, note: this is just passing through
+        so that a full "state" can be represented in one tuple
+        '''
 
         #debugging will force player number and order to be 0-5
         #so that this can be tested easier
@@ -117,7 +134,7 @@ class Risk:
 
         # 0 for number of card sets turned in
         #this just packs the info into a state tuple that is used to begin the game
-        return (order, territories, cards, 0)
+        return (steal_cards, turn_order, territories, cards, 0)
 
     def parse_state(self, state_string, debug=False):
         '''
@@ -130,7 +147,28 @@ class Risk:
         trade_ins = 0
 
         state_string = str(state_string)
-        #deconstruct the state_string
+
+        #the first character is the steal_cards setting
+        steal_cards = state_string[0]
+        if steal_cards == "1":
+            steal_cards = True
+        elif steal_cards == "2":
+            steal_cards = False
+        else:
+            raise ValueError("Steal cards was " + steal_cards + " instead of \'1\' or \'2\'")
+
+        state_string = state_string[1:]
+
+        #there is a "6" that seperates turn order from the rest of the state
+        six_loc = state_string.find("6")
+        turn_order = [int(x) for x in state_string[:six_loc] if len(x)!=0]
+
+        if debug:
+            print("Turn Order:",turn_order)
+        
+        state_string = state_string[six_loc+2:]
+        
+        #deconstruct the state_string (territories and cards)
         for id_num in range(44):
             
             if debug:
@@ -139,6 +177,7 @@ class Risk:
             if id_num!=0:
                 #remove the next id #, the leading 0 is implied
                 state_string = state_string[len(str(id_num)):]
+                
             if id_num<42:
                 #parses the card owner, then territory owner, then troop count
                 
@@ -190,9 +229,8 @@ class Risk:
                         troops = troops + state_string[:nid_loc+1]
                         state_string = state_string[nid_loc+1:]
 
-                troops = int(troops)
-                territories[id_num] = [t_owner,troops]
-                cards[id_num] = c_owner
+                territories[id_num] = [int(t_owner),int(troops)]
+                cards[id_num] = int(c_owner)
 
             else:
                 #must be a wild card (42/43)
@@ -202,26 +240,33 @@ class Risk:
 
         trade_ins=int(state_string) #if it parses correctly, this should be all that remains
 
-        if trade_ins>15:
+        if trade_ins > len(self.trade_vals):
             #trade ins go up to 15 possibilities
             print(territories)
             print("*"*50)
             print(cards)
             print("*"*50)
             print(trade_ins)
-            raise ValueError('Parsed incorrectly or impossible trade in value')
+            raise ValueError('Parsed incorrectly or impossible trade in value for this game')
 
-        return (territories, cards, trade_ins) #this is what a state consist of
+        return (steal_cards, turn_order, territories, cards, trade_ins) #this is what a state consist of
 
     def get_state(self, state):
         '''
         gets the state representation from the state
-        state = (territories, cards, trade_ins)
+        state = (steal_cards, turn_order, territories, cards, trade_ins)
         '''
 
-        territories, cards, trade_ins = state
+        steal_cards, turn_order, territories, cards, trade_ins = state
 
-        state_string = ""
+        #steal_cards is first
+        if steal_cards:
+            state_string = "1" #for yes steal cards
+        else:
+            state_string = "2" #for no do not steal cards
+
+        #the state string starts with turn order after steal_cards setting
+        state_string += "".join([str(x) for x in turn_order])+"6"
         
         for key in range(44):
             if key in territories:
@@ -237,4 +282,59 @@ class Risk:
 
         state_string = int(state_string)
 
-        return state_string    
+        return state_string
+
+    def deal_territories(self):
+        '''deals territories randomly, returns nothing'''
+
+        steal_cards, turn_order, territories, cards, trade_ins = self.state
+
+        remaining = list(range(42)) #unallocated territories
+
+        for index in range(42):
+            
+            player_id = turn_order[index%len(turn_order)]
+
+            chosen = random.choice(remaining)
+
+            remaining.remove(chosen)
+
+            territories[chosen][0]=player_id
+
+        self.state = (steal_cards, turn_order, territories, cards, trade_ins)
+
+    def winner(self, debug=False):
+        '''checks the game state to see if the game is over'''
+
+        steal_cards, turn_order, territories, cards, trade_ins = self.state
+
+        winner = True
+        
+        for t in territories:
+            if territories[t][0]!=territories[0][0]:
+                #there isn't a winner yet
+                winner=False
+                break
+
+        if debug:
+            print("Was a winner found?",winner)
+
+        return winner
+
+    def defeated(self, player, debug=False):
+        '''checks if a player has any territories'''
+
+        steal_cards, turn_order, territories, cards, trade_ins = self.state
+
+        defeated = True
+        
+        for t in territories:
+            if territories[t][0]==player:
+                #player has at least one territory
+                defeated=False
+                break
+
+        if debug:
+            print("Was player",player,"defeated?",defeated)
+
+        return defeated

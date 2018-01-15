@@ -4,7 +4,11 @@ for the configuration of the game in either
 GUI or headless modes
 '''
 
-def console_config():
+import random
+import human
+import agent
+
+def console_players():
     '''
     used to gather user configuration settings for game
     NOTE: this is not needed for the GUI
@@ -12,12 +16,17 @@ def console_config():
 
     players = int(input("How many players? "))
 
-    if input("Deal territories to players? y/n "):
+    if input("Deal territories to players? y/n ")=='y':
         deal=True
     else:
         deal=False
 
-    return (players, deal)
+    if input("Take cards upon player defeat? y/n ")=='y':
+        steal_cards=True
+    else:
+        steal_cards=False
+
+    return (players, deal, steal_cards)
 
 def turn_order(players, clockwise = "", debug=False):
     '''
@@ -66,9 +75,33 @@ def turn_order(players, clockwise = "", debug=False):
         if debug:
             return True
     else:
-        raise ValueError("Error generating player order... " + str(order))
+        raise ValueError("Error generating player order " + str(order) +
+            " did not match any order of " + str(list(range(players))))
         
     return order
+
+def console_get_players(players):
+    '''
+    configure what kind of player each player is and return them in a list
+    NOTE: not needed for the GUI
+    '''
+
+    agent_list = []
+
+    for player in range(players):
+
+        prompt = ("What kind of player is " + str(player+1) +
+                  "\nA human = h\nA BaseAgent = b\nA RL agent = r\nh/b/r: ")
+        ans = input(prompt)
+
+        if ans == 'h':
+            agent_list.append(human.Human(player))
+        elif ans == 'b':
+            agent_list.append(agent.BaseAgent(player))
+        else:
+            raise ValueError("No agent of that ID exist yet")
+
+    return agent_list
 
 def console_trade_vals():
     '''
@@ -78,7 +111,7 @@ def console_trade_vals():
 
     prompt = ("What do you want card trade in values to be?\n" +
         "Standard 4,6,8,10,15,...,60?\nBy one 4,5,6,etc?\nCustom values?\n" +
-        "s\1\c: ")
+        "s/1/c: ")
     choice = input(prompt)
 
     if choice == "s":

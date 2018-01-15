@@ -5,6 +5,7 @@ by running this it will begin a game with a GUI
 
 import pygame
 import risk_environment as risk
+import config
         
 def startup():
     '''begins the game'''
