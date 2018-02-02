@@ -1,0 +1,37 @@
+Creating "projects" in Django is easy
+
+for example, to create the project we are in right now (tutorial_site)
+use 
+$ django-admin startproject tutorial_site
+
+and it will set up basic directories and files for the site
+that will give it basic funcitonality
+
+to check out the site first you have to run the server
+NOTE: running this Django lightweight server is only
+for development purposes, and it does NOT have any where near the power
+to deploy a real website
+
+just run the manage.py script in python3 with a command line argument
+of runserver
+
+$ python3 manage.py runserver
+
+NOTE: the functionality inside manage is just redirecting console commands to some other python file
+
+now that the lightweight server is up, it's serving content on your machine
+to view it, go to your home IP at the port its serving it on (8000 by default)
+
+http://127.0.0.1:8000/
+
+usually through your favorite web browser
+
+All the server request (such as serving up content to a visitor) will show up in terminal
+
+To create applets inside your project use
+$ python3 manage.py startapp polls
+
+this will create all the starting directories you'll need for an applet called "polls"
+we will make this app store the results of user's selections from a poll on the website
+
+
