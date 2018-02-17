@@ -186,14 +186,17 @@ class Grid_World:
     
 
 #the rest are testing environment set ups, not part of the environment itself
-def generate_grid(length, height, start, walls, terminal_rewards):
+def generate_grid(length, height, start, walls, terminal_rewards, step_cost=-.1):
     '''
     builds a valid Grid_World object base on these parameters
     
-    .  .  .  1
-    .  x  . -1
-    s  .  .  .
-    
+    a 'valid' grid world will be one such that
+    - you can't have an action that moves you into a wall
+    - you can't move off the board
+    - the terminal states have no actions
+    - all none terminal states have a reward equal to the step cost
+
+    the step cost is what will incentivise the agent to solve the maze more quickly
     '''
 
     #the grid will be 4 long and 3 in height
@@ -222,6 +225,10 @@ def generate_grid(length, height, start, walls, terminal_rewards):
     g.rewards = terminal_rewards
     g.actions = actions
 
+    #assign each non terminal valid state with the step cost
+    for key in actions:
+      g.rewards[key]=step_cost
+
     #now we have the grid!
     return g
 
@@ -235,13 +242,7 @@ def test_grid():
   s  .  .  .
   '''
 
-  width = 4
-  height = 3
-  walls = [(1,1)]
-  start_position = (0,0)
-  terminal_rewards = {(3,2):1, (3,1):-1}
-
-  g = generate_grid(width, height, start_position, walls, terminal_rewards)
+  g = generate_grid(4, 3, (0,0), [(1,1)], {(3,2):1, (3,1):-1}, -0.1)
 
   return g
 
@@ -250,15 +251,15 @@ def run_test():
   g = test_grid() #create test grid
   print("expected: 0,0 ||",g.get_state()) #show where player is now, should be 0,0
   r = g.move('U') #move up
-  print("expected: 0,1 r=0 ||",g.get_state(), r) # should be 0,1 and no reward
+  print("expected: 0,1 r=-0.1 ||",g.get_state(), r) # should be 0,1 and no reward
   r = g.move('R') #invalid move into wall
   #should still be in 0,1 since R is invalid. Also no reward
-  print("expected: 0,1 r=0 ||",g.get_state(), r)
+  print("expected: 0,1 r=-0.1 ||",g.get_state(), r)
   r = g.move('U')
   r = g.move('R')
   r = g.move('R')
   r = g.move('D')
-  print("expected: 2,1 r=0 ||",g.get_state(), r) #should be at 2,1 with no reward
+  print("expected: 2,1 r=-0.1 ||",g.get_state(), r) #should be at 2,1 with no reward
   r = g.move('R') #move into terminal loose state
   print("expected: 3,1 r=-1 ||",g.get_state(), r)
   #try to move out of terminal state
