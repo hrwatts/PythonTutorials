@@ -55,7 +55,7 @@ def get_model(n_cols, node, layers=1, half=True):
 	model.add(Dense(2, activation='softmax'))
 	return model
 #changes in architecture we want to try
-nodes = [32,128,512,1024]
+nodes = [16,32,64,128]
 
 #for recording histories of models
 histories=[]
@@ -65,7 +65,7 @@ for node in nodes:
 	print('Fitting with '+str(node)+' nodes per layer')
 	model = get_model(108,node, 1,False)
 	model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
-	fitted = model.fit(X, y, epochs=4)
+	fitted = model.fit(X, y, epochs=4, verbose=False)
 	histories.append(fitted.history['acc'])
 
 #plot for visuals

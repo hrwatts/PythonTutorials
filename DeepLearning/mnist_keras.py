@@ -32,7 +32,7 @@ model.add(Dense(24, activation='sigmoid', input_shape=(n_cols,)))
 model.add(Dense(18, activation='sigmoid'))
 model.add(Dense(10, activation='softmax'))
 model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
-model.fit(X_train, y_train, epochs=50)
+model.fit(X_train, y_train, epochs=50, verbose=False)
 pred=model.predict(X_test)
 
 #this is just to pred the data for display
