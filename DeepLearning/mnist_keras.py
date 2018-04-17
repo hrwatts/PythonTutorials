@@ -22,6 +22,8 @@ X = digits.data
 y = to_categorical(digits.target)
 n_cols = X.shape[1]
 
+print("Needed shape",X.shape,'for',X.shape[1],'in_cols')
+
 
 #split into training and testing sets
 X_train, X_test, y_train, y_test = train_test_split(X,y, test_size=0.25, random_state=21, stratify=y)

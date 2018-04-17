@@ -86,8 +86,7 @@ def play_game(pl1,pl2,env,human=0,verbose=True):
 		h=False
 		p1=pl1
 		p2=pl2
-	
-
+	return env.reward(True) #1 for p1 wins
 
 class Player:
 
@@ -544,36 +543,34 @@ def turtle_print(board,v):
 
 	
 	
-	
-	
-
 #---------------------------------
 #The "main" of the program is this
 #---------------------------------
-p1 = Player(True)
-p2 = Player(False)
+if __name__=='__main__':
+        p1 = Player(True)
+        p2 = Player(False)
 
-play = "yes"
-while play=="yes":
-	num_train = int(input("How many times should your agent train? "))
-	verbose = input("Show training? (yes/no) ")
-	if verbose=="yes":
-		verbose=True
-	else:
-		verbose=False
-	
-	for t in range(num_train):
-		env=Board()
-		play_game(p1,p2,env,verbose=verbose)
+        play = "yes"
+        while play=="yes":
+                num_train = int(input("How many times should your agent train? "))
+                verbose = input("Show training? (yes/no) ")
+                if verbose=="yes":
+                        verbose=True
+                else:
+                        verbose=False
+                
+                for t in range(num_train):
+                        env=Board()
+                        play_game(p1,p2,env,verbose=verbose)
 
-	h_player = int(input("What player would you like to be? (1/2/0) "))
-	if h_player>0:
-		env=Board()
-		play_game(p1,p2,env,human=h_player)
+                h_player = int(input("What player would you like to be? (1/2/0) "))
+                if h_player>0:
+                        env=Board()
+                        play_game(p1,p2,env,human=h_player)
 
-	play = input("Would you like to do this again? (yes/no) ")
+                play = input("Would you like to do this again? (yes/no) ")
 
-print("Thanks for playing!")
+        print("Thanks for playing!")
 
 
 

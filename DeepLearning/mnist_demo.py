@@ -54,6 +54,7 @@ model.add(Dense(int(num_nodes*0.75), activation='relu')) #hidden layer
 model.add(Dense(out_columns, activation='softmax'))
 model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
 model.fit(X, y, epochs=50, verbose=True)
+
 #done!
 
 #How did it do?
